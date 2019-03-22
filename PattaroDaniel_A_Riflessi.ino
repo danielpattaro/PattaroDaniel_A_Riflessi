@@ -9,17 +9,27 @@ int controllo=0;
 int tempoluc=0;
 int tempobuz=0;
 #include <LiquidCrystal.h>
- 
+
+void(* Riavvia)(void) = 0;
 
 LiquidCrystal lcd(7, 6, 5, 4, 3, 2);
 void setup() {
   // put your setup code here, to run once:
-
+led=9;
+bottone = 10;
+buzzer = 11;
+val=LOW;
+numeroRandom=0;
+pas=0;
+controllo=0;
+tempoluc=0;
+tempobuz=0;
 pinMode (led, OUTPUT);
 pinMode (bottone, INPUT);
 pinMode (buzzer, OUTPUT);
 lcd.begin(16, 2);
 lcd.print("TEST RIFLESSI");
+delay(100);
 }
 
 void loop() {
@@ -39,8 +49,8 @@ if (val== HIGH && pas==0)
  digitalWrite(led,HIGH);
   pas=1;
   tempoluc=millis();
-  }
- 
+  
+}
 val = digitalRead(bottone);
 
   if (val== HIGH && pas==1)
@@ -79,18 +89,84 @@ val = digitalRead(bottone);
 
 if (val== HIGH && pas==3)
  {
-  pas=0;
-  controllo=0;
   lcd.clear();
-    lcd.print("Luce "+ String(tempoluc));
+    if (tempoluc!=0 && tempobuz!=0)
+   { lcd.print("Luce: "+ String(tempoluc));
+    lcd.print(" Buzz: "+ String(tempobuz ));
+    }
+    else
+    {
+      lcd.print("TEST NON VALIDO");
+      }
     lcd.setCursor(0, 1);
-    lcd.print("Buzz "+ String(tempobuz ));
-    val=LOW;
-    tempobuz=0;
-    tempoluc=0;
-    delay(15000);
-    setup();
-   
+    lcd.print("TIENI PREMUTO IL BOTTONE PER CONTINUARE");
+    delay(1000);
+    pas=4;
   }
+
+
+  /*
+  
+if (pas==4)
+{for (int positionCounter = 0; positionCounter < 31; positionCounter++) 
+{
+    
+    lcd.scrollDisplayRight();
+    
+    delay(500);
+  if (val== HIGH )
+ {
+  break;
+  }
+}
+}
+else
+{
+  for (int positionCounter = 0; positionCounter < 3; positionCounter++) 
+{
+    
+    lcd.scrollDisplayRight();
+    
+    delay(500);
+    if (val== HIGH )
+ {
+  Riavvia();
+  }
+}
+  for (int positionCounter = 0; positionCounter < 3; positionCounter++) 
+{
+    
+    lcd.scrollDisplayLeft();
+    
+    delay(500);
+    val = digitalRead(bottone);
+
+if (val== HIGH )
+ {
+  break;
+  }
+}
+  }
+*/
+
+  
+val = digitalRead(bottone);
+while (val==LOW && pas==4)
+{
+
+lcd.setCursor(0, 0);
+  for (int positionCounter = 0; positionCounter < 31; positionCounter++) 
+{
+    
+    lcd.scrollDisplayRight();
+        val = digitalRead(bottone);
+      if (val== HIGH )
+ {
+  Riavvia();
+  }
+    delay(400);
+
+    }
+}
 
 }
