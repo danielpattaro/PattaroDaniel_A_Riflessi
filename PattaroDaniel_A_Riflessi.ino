@@ -40,10 +40,18 @@ void loop() {
 val=digitalRead(bottone);
 
 
-
- 
 if (val== HIGH && pas==0)
-{
+{lcd.clear();
+ lcd.print("3");
+ delay(1000);
+ lcd.clear();
+ lcd.print("2");
+ delay(1000);
+ lcd.clear();
+ lcd.print("1");
+ delay(1000);
+ lcd.clear();
+ lcd.print("TEST RIFLESSI");
  numeroRandom = random(5000); 
  delay(numeroRandom); 
  digitalWrite(led,HIGH);
@@ -93,6 +101,14 @@ if (val== HIGH && pas==3)
     if (tempoluc!=0 && tempobuz!=0)
    { lcd.print("Luce: "+ String(tempoluc));
     lcd.print(" Buzz: "+ String(tempobuz ));
+    if ((tempoluc+tempobuz)/2<250)
+   {
+    lcd.print(" POSITIVO" );
+    }
+    else
+    {
+      lcd.print(" NEGATIVO" );
+      }
     }
     else
     {
